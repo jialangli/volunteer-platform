@@ -1,0 +1,53 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: volunteer-platform
+  datasource:
+    url: jdbc:mysql://localhost:3306/volunteer?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    # 本机已安装 MySQL（D:\dev\mysql），root 密码由安装流程设置
+    password: volunteer123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      # password: （Memurai/容器默认无密码，如设置了请在此填写）
+  jackson:
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      # 活动封面上传限制：单文件 5MB、单请求 10MB
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# 应用自定义配置
+app:
+  jwt:
+    # 随机生成的 HS 签名密钥（安装流程生成，请勿外泄）
+    secret: 0WpkUUUmDKrqJET1v5BKn+/t+w34d21UsGEaVVYq95tzJJV2bX5qUgaujuBlIY7A
+    access-expire-minutes: 120
+    refresh-expire-days: 7
+  # 登录限流：同 IP 每 5 分钟最多 10 次
+  login:
+    rate-limit-count: 10
+    rate-limit-window-minutes: 5
+  # 文件上传与生成目录（活动封面、证明 PDF）
+  upload-dir: D:/VolunteerPlatform/data/uploads
+
+logging:
+  level:
+    com.gdupt.volunteer: debug

@@ -1,0 +1,38 @@
+# 备选开发环境：用 Docker 跑 MySQL + Redis（不想在本机装服务时使用）
+# 使用方式：docker compose up -d   （数据库 root 密码：volunteer123，仅限开发环境）
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: volunteer-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: volunteer123
+      MYSQL_DATABASE: volunteer
+      TZ: Asia/Shanghai
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./deploy/data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot", "-pvolunteer123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: volunteer-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./deploy/data/redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
