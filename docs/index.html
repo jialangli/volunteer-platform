@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>志愿服务管理平台 · Volunteer Platform</title>
+<style>
+  :root {
+    --bg: #f8fafc; --card: #ffffff; --ink: #0f172a; --sub: #64748b;
+    --brand: #2563eb; --brand-2: #0ea5e9; --line: #e2e8f0; --ok: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: var(--bg); color: var(--ink); line-height: 1.6; }
+  a { color: var(--brand); text-decoration: none; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line); z-index: 10; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .logo .dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+  .nav-links { display: flex; gap: 22px; font-size: 14px; }
+  .nav-links a { color: var(--sub); } .nav-links a:hover { color: var(--ink); }
+
+  /* hero */
+  .hero { padding: 80px 0 48px; text-align: center; }
+  .badge { display: inline-block; padding: 4px 14px; border-radius: 999px; background: #eff6ff; color: var(--brand);
+           font-size: 13px; margin-bottom: 18px; }
+  .hero h1 { font-size: 44px; letter-spacing: 1px; margin-bottom: 16px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--brand), var(--brand-2));
+                  -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: var(--sub); font-size: 17px; max-width: 640px; margin: 0 auto 28px; }
+  .cta { display: inline-flex; gap: 12px; }
+  .btn { padding: 11px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; }
+  .btn-primary { background: var(--brand); color: #fff; } .btn-primary:hover { background: #1d4ed8; }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: #fff; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; text-align: center; }
+  .stat b { font-size: 28px; display: block; color: var(--brand); }
+  .stat span { color: var(--sub); font-size: 13px; }
+
+  section { padding: 40px 0; }
+  h2 { font-size: 26px; margin-bottom: 8px; }
+  .lead { color: var(--sub); margin-bottom: 28px; }
+
+  /* feature grid */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .card h3 { font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p { color: var(--sub); font-size: 13.5px; }
+  .icon { width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+          font-size: 17px; background: #eff6ff; }
+
+  /* stack chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { padding: 7px 16px; border-radius: 999px; background: #fff; border: 1px solid var(--line);
+          font-size: 13px; color: var(--ink); }
+
+  /* arch */
+  .arch { display: flex; align-items: stretch; gap: 10px; }
+  .layer { flex: 1; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
+  .layer b { display: block; margin-bottom: 6px; } .layer span { font-size: 12.5px; color: var(--sub); }
+  .arrow { align-self: center; color: var(--sub); font-size: 20px; }
+
+  /* code block */
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 20px; overflow-x: auto; font-size: 13px; line-height: 1.7; }
+  pre .c { color: #64748b; }
+
+  /* table */
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden;
+          border: 1px solid var(--line); }
+  th, td { padding: 12px 16px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--line); }
+  th { background: #f1f5f9; font-weight: 600; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; color: var(--sub); font-size: 13px; margin-top: 40px; }
+
+  @media (max-width: 760px) {
+    .hero h1 { font-size: 32px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+    .arch { flex-direction: column; } .arrow { transform: rotate(90deg); }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo"><span class="dot"></span>志愿服务管理平台</div>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#stack">技术栈</a>
+      <a href="#arch">架构</a>
+      <a href="#start">快速开始</a>
+      <a href="https://github.com/jialangli/volunteer-platform">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap hero">
+  <span class="badge">Capstone 课程项目 · 全栈实现</span>
+  <h1>校园<span>志愿服务</span>管理平台</h1>
+  <p>覆盖「活动发布 → 报名审核 → 签到签退 → 工时核算 → 档案证明 → 统计可视化 → 系统管理」全流程的一体化平台，服务志愿者、组织者与管理员三类角色。</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/jialangli/volunteer-platform">查看源码仓库</a>
+    <a class="btn btn-ghost" href="#start">快速开始</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>17</b><span>前端页面</span></div>
+    <div class="stat"><b>60+</b><span>后端接口</span></div>
+    <div class="stat"><b>167.92h</b><span>演示累计工时</span></div>
+    <div class="stat"><b>500</b><span>并发压测 0 错误</span></div>
+  </div>
+</header>
+
+<section class="wrap" id="features">
+  <h2>核心功能</h2>
+  <p class="lead">按角色划分的模块化单体实现，权限与业务规则层层校验。</p>
+  <div class="grid">
+    <div class="card"><h3><span class="icon">🔐</span>认证授权</h3><p>JWT 双令牌 + RBAC 三角色 + 登录限流与刷新轮换，密码 BCrypt 加密。</p></div>
+    <div class="card"><h3><span class="icon">📣</span>活动与报名</h3><p>活动状态机（草稿→招募→进行→结束→归档），报名审核流，名额原子扣减防超卖。</p></div>
+    <div class="card"><h3><span class="icon">✅</span>签到与工时</h3><p>签到时间窗校验 + 重复签到拦截，RULE_V1 规则核算工时，支持手动 / 扫码签到。</p></div>
+    <div class="card"><h3><span class="icon">📜</span>档案与证明</h3><p>周期证明按学年签发，自动汇总工时，实时生成 A4 中文 PDF 并支持下载。</p></div>
+    <div class="card"><h3><span class="icon">📊</span>统计可视化</h3><p>ECharts 看板：总览指标、月度趋势、类型分布、热门活动与志愿者排行。</p></div>
+    <div class="card"><h3><span class="icon">🛠️</span>系统管理</h3><p>用户管理、角色分配、公告发布、活动类型维护、全量操作审计日志。</p></div>
+    <div class="card"><h3><span class="icon">🖼️</span>活动封面上传</h3><p>图片类型/大小白名单校验，UUID 命名，静态资源 CDN 式访问，卡片封面展示。</p></div>
+    <div class="card"><h3><span class="icon">🔳</span>扫码签到</h3><p>组织者一键生成签到二维码，志愿者扫码进入签到页确认后完成签到（method=QR）。</p></div>
+    <div class="card"><h3><span class="icon">📄</span>证明 PDF</h3><p>OpenPDF 嵌入系统中文字体，签发即生成电子版，编号防伪、可在平台核验。</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="stack">
+  <h2>技术栈</h2>
+  <p class="lead">主流稳定选型，开箱即跑。</p>
+  <div class="chips">
+    <span class="chip">Java 17</span><span class="chip">Spring Boot 3.3</span><span class="chip">Spring Security</span>
+    <span class="chip">MyBatis-Plus</span><span class="chip">MySQL 8</span><span class="chip">Redis</span>
+    <span class="chip">JJWT</span><span class="chip">OpenPDF</span><span class="chip">SpringDoc</span>
+    <span class="chip">Vue 3</span><span class="chip">Vite 5</span><span class="chip">Element Plus</span>
+    <span class="chip">Pinia</span><span class="chip">Vue Router</span><span class="chip">ECharts 5</span>
+    <span class="chip">Nginx</span><span class="chip">Maven</span><span class="chip">Docker Compose（备选）</span>
+  </div>
+</section>
+
+<section class="wrap" id="arch">
+  <h2>系统架构</h2>
+  <p class="lead">前后端分离，Nginx 统一入口。</p>
+  <div class="arch">
+    <div class="layer"><b>展示层</b><span>Vue3 SPA<br/>三端 17 页面<br/>ECharts 看板</span></div>
+    <div class="arrow">→</div>
+    <div class="layer"><b>Nginx 80</b><span>静态资源<br/>/api 与 /uploads 反向代理<br/>history 路由回退</span></div>
+    <div class="arrow">→</div>
+    <div class="layer"><b>后端 8080</b><span>模块化单体<br/>认证 / 活动 / 签到工时<br/>证明 / 统计 / 管理</span></div>
+    <div class="arrow">→</div>
+    <div class="layer"><b>数据层</b><span>MySQL 8（11 表）<br/>Redis（会话/限流）</span></div>
+  </div>
+</section>
+
+<section class="wrap" id="start">
+  <h2>快速开始</h2>
+  <p class="lead">克隆后按 README 启动；演示数据脚本一键灌入。</p>
+<pre><span class="c"># 1. 后端（需 JDK17 / Maven / MySQL8 / Redis）</span>
+cd backend && mvn spring-boot:run
+
+<span class="c"># 2. 前端</span>
+cd frontend && npm install && npm run dev
+
+<span class="c"># 3. 灌入演示数据</span>
+mysql -uroot -p volunteer -e "source sql/demo_data.sql"
+
+<span class="c"># 4. 访问</span>
+http://localhost:5173   <span class="c"># 开发调试</span>
+http://localhost        <span class="c"># Nginx 生产入口</span></pre>
+
+  <h2 style="margin-top:36px">演示账号</h2>
+  <p class="lead">演示数据已含 10 名志愿者，密码统一 <code>vol123456</code>。</p>
+  <table>
+    <tr><th>角色</th><th>账号</th><th>密码</th><th>可见内容</th></tr>
+    <tr><td>管理员</td><td>admin</td><td>admin123</td><td>统计看板 / 用户 / 公告 / 类型 / 日志</td></tr>
+    <tr><td>组织者</td><td>organizer</td><td>organizer123</td><td>活动管理 / 报名审核 / 签到 / 证明签发</td></tr>
+    <tr><td>志愿者</td><td>linxiaoyu 等</td><td>vol123456</td><td>活动广场 / 我的报名 / 签到 / 档案与证明</td></tr>
+  </table>
+</section>
+
+<footer>
+  <div class="wrap">
+    志愿服务管理平台 · <a href="https://github.com/jialangli/volunteer-platform">github.com/jialangli/volunteer-platform</a><br/>
+    本页为项目展示页；完整功能需按 README 本地启动后端与数据库。
+  </div>
+</footer>
+
+</body>
+</html>
